@@ -1,7 +1,7 @@
 var Turn = function(mainarea, figure) {
     // returns true if figure is fell
     this.act = function() {
-        return figure.fall().is_fell();
+        return figure.fall();
     };
 
     this.render = function() {

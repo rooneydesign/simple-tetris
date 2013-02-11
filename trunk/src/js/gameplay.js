@@ -7,7 +7,7 @@ var Gameplay = function (mainarea) {
             next_trun = this.turn.act();
 
         if (next_trun)
-            this.turn = new Turn(mainarea, new Dot(5, 0, mainarea)).render();
+            this.turn = new Turn(mainarea, new Figure(5, 0, mainarea)).render();
 
         return this;
     };
