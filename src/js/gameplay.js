@@ -1,17 +1,34 @@
-var Gameplay = function () {
-    this.mainarea = null;
-    this.dot = new Dot(0, 0);
+var Gameplay = function (mainarea) {
+    this.turn = null;
 
-    this.init = function (mainarea) {
-        this.mainarea = mainarea;
+    this.act = function() {
+        var next_trun = true;
+        if (this.turn != null)
+            next_trun = this.turn.act();
+
+        if (next_trun)
+            this.turn = new Turn(mainarea, new Dot(5, 0, mainarea)).render();
+
         return this;
     };
 
-    this.act = function() {
-        this.dot.move(
-                this.mainarea,
-                (this.dot.x + 1) % WIDTH,
-                (this.dot.y + 1) % HEIGHT
-        );
+    this.up = function () {
+        this.turn.rotate();
+        return this;
+    };
+
+    this.down = function () {
+        this.turn.drop();
+        return this;
+    };
+
+    this.right = function () {
+        this.turn.right();
+        return this;
+    };
+
+    this.left = function () {
+        this.turn.left();
+        return this;
     };
 };
