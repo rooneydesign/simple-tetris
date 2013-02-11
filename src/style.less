@@ -55,18 +55,19 @@ footer {
 
 div.gametable {
     display: table;
-}
 
-div.gamerow {
-    display: table-row;
-}
+    div.gamerow {
+        display: table-row;
 
-div.gamecell {
-    display: table-cell;
-    border-top: 1px solid #d3d3d3;
-    border-left: 1px solid #d3d3d3;
-    width: @cell-width;
-    height: @cell-height;
+        div.gamecell {
+            display: table-cell;
+            border-top: 1px solid #d3d3d3;
+            border-left: 1px solid #d3d3d3;
+            width: @cell-width;
+            height: @cell-height;
+            vertical-align: top;
+        }
+    }
 }
 
 div.sel {

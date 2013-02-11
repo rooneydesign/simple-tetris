@@ -1,34 +1,37 @@
 var Gameplay = function (mainarea) {
-    this.turn = null;
+    this.figure = null;
 
     this.act = function() {
-        var next_trun = true;
-        if (this.turn != null)
-            next_trun = this.turn.act();
+        var next_turn = true;
+        if (this.figure != null) {
+            next_turn = this.figure.drop();
+            if (next_turn)
+                this.figure.commit();
+        }
 
-        if (next_trun)
-            this.turn = new Turn(mainarea, new Figure(5, 0, mainarea)).render();
+        if (next_turn)
+            this.figure = new Figure(mainarea).render();
 
         return this;
     };
 
     this.up = function () {
-        this.turn.rotate();
+        this.figure.rotate();
         return this;
     };
 
     this.down = function () {
-        this.turn.drop();
+        this.figure.drop();
         return this;
     };
 
     this.right = function () {
-        this.turn.right();
+        this.figure.right();
         return this;
     };
 
     this.left = function () {
-        this.turn.left();
+        this.figure.left();
         return this;
     };
 };
