@@ -1,57 +1,209 @@
-var Figure = function (x, y, gamearea) {
-    this.x = x;
-    this.y = y;
+var PATTERNS = [
+    {
+        startx: 4,
+        patterns:[
+            [1, 1],
+            [1, 1]
+        ]
+    },
+    {
+        startx: 4,
+        patterns:[
+            [
+                [0, 1, 0],
+                [1, 1, 0],
+                [0, 1, 0]
+            ],
+            [
+                [0, 1, 0],
+                [1, 1, 1],
+                [0, 0, 0]
+            ],
+            [
+                [0, 1, 0],
+                [0, 1, 1],
+                [0, 1, 0]
+            ],
+            [
+                [0, 0, 0],
+                [1, 1, 1],
+                [0, 1, 0]
+            ]
+        ]
+    },
+    {
+        startx: 4,
+        patterns:[
+            [
+                [0, 1, 0],
+                [1, 1, 0],
+                [1, 0, 0]
+            ],
+            [
+                [0, 0, 0],
+                [1, 1, 0],
+                [0, 1, 1]
+            ]
+        ]
+    },
+    {
+        startx: 4,
+        patterns:[
+            [
+                [0, 1, 0],
+                [0, 1, 1],
+                [0, 0, 1]
+            ],
+            [
+                [0, 1, 1],
+                [1, 1, 0],
+                [0, 0, 0]
+            ]
+        ]
+    },
+    {
+        startx: 3,
+        patterns:[
+            [
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0]
+            ],
+            [
+                [0, 0, 0, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]
+            ]
+        ]
+    },
+    {
+        startx: 3,
+        patterns:[
+            [
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0]
+            ],
+            [
+                [0, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 1, 1],
+                [0, 0, 0, 0]
+            ],
+            [
+                [0, 0, 0, 0],
+                [0, 1, 1, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0]
+            ],
+            [
+                [0, 0, 0, 0],
+                [1, 1, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 0]
+            ]
+        ]
+    },
+    {
+        startx: 3,
+        patterns:[
+            [
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0]
+            ],
+            [
+                [0, 0, 0, 0],
+                [0, 1, 1, 1],
+                [0, 1, 0, 0],
+                [0, 0, 0, 0]
+            ],
+            [
+                [0, 0, 0, 0],
+                [0, 1, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0]
+            ],
+            [
+                [0, 0, 0, 0],
+                [0, 0, 1, 0],
+                [1, 1, 1, 0],
+                [0, 0, 0, 0]
+            ]
+        ]
+    }
+];
 
-    this.move = function (newx, newy) {
-        gamearea.cells[this.y][this.x].unsel();
-        this.x = newx;
-        this.y = newy;
-        gamearea.cells[this.y][this.x].sel();
-        return this;
-    };
+var Figure = function (gamearea) {
+    this.pattern = PATTERNS[parseInt(Math.random()*PATTERNS.length)];
+    this.direction = parseInt(Math.random()*this.pattern.patterns.length);
+    this.x = this.pattern.startx;
+    this.y = 0;
 
-    this.can_moved = function(newx, newy) {
-        return 0 <= newy && newy < HEIGHT && 0 <= newx && newx < WIDTH && !gamearea.cells[newy][newx].is_sel();
-    };
-
-    this.fall = function() {
-        if (!this.can_moved(this.x, this.y+1))
+    this.move = function (newx, newy, new_direction) {
+        if (!this.can_moved(newx, newy, new_direction))
             return true;
 
-        this.move(this.x, this.y+1);
-
+        this.render(false);
+        this.x = newx;
+        this.y = newy;
+        this.direction = new_direction;
+        this.render(true);
         return false;
     };
 
-    this.render = function () {
-        gamearea.cells[this.y][this.x].sel();
+    this.can_moved = function (newx, newy, new_direction) {
+        var patterns = this.pattern.patterns[new_direction];
+        for (var i=0; i<patterns.length; i++)
+            for (var j=0; j<patterns[i].length; j++) {
+                if (patterns[i][j] == 1) {
+                    var y = newy+i;
+                    var x = newx+j;
+                    if (!(0 <= x && x < WIDTH && 0 <= y && y < HEIGHT))
+                        return false;
+
+                    if (gamearea.cells[y][x].committed)
+                        return false;
+                }
+            }
+
+        return true;
+    };
+
+    this.render = function (sel, commit) {
+        var patterns = this.pattern.patterns[this.direction];
+        for (var i=0; i<patterns.length; i++)
+            for (var j=0; j<patterns[i].length; j++) {
+                if (patterns[i][j] == 1)
+                    if (sel)
+                        gamearea.cells[this.y+i][this.x+j].sel(commit);
+                    else
+                        gamearea.cells[this.y+i][this.x+j].unsel();
+            }
         return this;
+    };
+
+    this.commit = function () {
+        return this.render(true, true);
     };
 
     this.drop = function () {
-        if (!this.can_moved(this.x, this.y+1))
-            return true;
-
-        this.move(this.x, this.y+1);
-
-        return false;
+        return this.move(this.x, this.y + 1, this.direction);
     };
 
     this.right = function () {
-        if (!this.can_moved(this.x+1, this.y))
-            return true;
-
-        this.move(this.x+1, this.y);
-
-        return false;
+        return this.move(this.x + 1, this.y, this.direction);
     };
 
     this.left = function () {
-        if (!this.can_moved(this.x-1, this.y))
-            return true;
+        return this.move(this.x - 1, this.y, this.direction);
+    };
 
-        this.move(this.x-1, this.y);
-
-        return false;
+    this.rotate = function () {
+        return this.move(this.x, this.y, (this.direction + 1) % this.pattern.patterns.length);
     };
 };

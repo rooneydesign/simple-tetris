@@ -1,6 +1,10 @@
 var Cell = function (x, y, $div) {
-    this.sel = function () {
+    this.committed = false;
+
+    this.sel = function (commit) {
         $div.addClass('sel');
+        if (commit)
+            this.committed = true;
         return this;
     };
 
@@ -8,8 +12,4 @@ var Cell = function (x, y, $div) {
         $div.removeClass('sel');
         return this;
     };
-
-    this.is_sel = function() {
-        return $div.hasClass('sel');
-    }
 };
