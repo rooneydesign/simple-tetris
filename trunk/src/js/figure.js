@@ -16,11 +16,11 @@ var Figure = function (x, y, gamearea) {
 
     this.fall = function() {
         if (!this.can_moved(this.x, this.y+1))
-            return false;
+            return true;
 
         this.move(this.x, this.y+1);
 
-        return true;
+        return false;
     };
 
     this.render = function () {
@@ -30,28 +30,28 @@ var Figure = function (x, y, gamearea) {
 
     this.drop = function () {
         if (!this.can_moved(this.x, this.y+1))
-            return false;
+            return true;
 
         this.move(this.x, this.y+1);
 
-        return true;
+        return false;
     };
 
     this.right = function () {
         if (!this.can_moved(this.x+1, this.y))
-            return false;
+            return true;
 
         this.move(this.x+1, this.y);
 
-        return true;
+        return false;
     };
 
     this.left = function () {
         if (!this.can_moved(this.x-1, this.y))
-            return false;
+            return true;
 
         this.move(this.x-1, this.y);
 
-        return true;
+        return false;
     };
 };
