@@ -42,7 +42,7 @@ var Gameengine = function() {
     this.step_keyboard = function () {
         var now = new Date().getTime();
         var amount_of_millis_for_every_keypress = 1 / (this.key == 40 ? DOWN_KEYBOARD_SPEED : KEYBOARD_SPEED) * 1000;
-        var current_amount_of_keypresses = Math.floor((now - this.timer) / amount_of_millis_for_every_keypress);
+        var current_amount_of_keypresses = Math.floor((now - this.key_timer) / amount_of_millis_for_every_keypress);
 
         if (current_amount_of_keypresses >= this.amount_of_keypresses) {
             if (!this.acting && !this.pressing) { // to avoid concurrent access, we refuse keypress() if there is a parallel act or keypress event
@@ -112,12 +112,15 @@ var Gameengine = function() {
     };
 
     this.keydown = function (e) {
+        if (this.key != null)
+            return this;
         this.key = e.which;
         if (37 <= this.key && this.key <= 40)
             e.preventDefault();
         this.key_timer = new Date().getTime();
         this.amount_of_keypresses = 0;
-        return this.step_keyboard();
+        this.step_keyboard();
+        return this;
     };
 
     this.keypress = function() {
