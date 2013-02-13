@@ -2,8 +2,10 @@ var PATTERNS = [
     {
         startx: 4,
         patterns:[
-            [1, 1],
-            [1, 1]
+            [
+                [1, 1],
+                [1, 1]
+            ]
         ]
     },
     {

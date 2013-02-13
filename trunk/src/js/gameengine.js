@@ -1,3 +1,10 @@
+var KEY_LEFT = 37;
+var KEY_UP = 38;
+var KEY_RIGHT = 39;
+var KEY_DOWN = 40;
+var DO_NOT_REPEAT = -1;
+var KEY_ALL = [KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN];
+
 var Gameengine = function() {
     this.timer = new Date().getTime();
     this.speed = INITIAL_SPEED;
@@ -41,10 +48,17 @@ var Gameengine = function() {
 
     this.step_keyboard = function () {
         var now = new Date().getTime();
-        var amount_of_millis_for_every_keypress = 1 / (this.key == 40 ? DOWN_KEYBOARD_SPEED : KEYBOARD_SPEED) * 1000;
-        var current_amount_of_keypresses = Math.floor((now - this.key_timer) / amount_of_millis_for_every_keypress);
+        var keypress;
+        var speed = KEYBOARD_SPEED[this.key];
+        if (speed) {
+            var amount_of_millis_for_every_keypress = 1 / speed[0] * 1000;
+            var current_amount_of_keypresses = Math.floor((now - this.key_timer - (this.amount_of_keypresses > 0 ? speed[1] : 0)) / amount_of_millis_for_every_keypress);
+            keypress = current_amount_of_keypresses >= this.amount_of_keypresses;
+        } else {
+            keypress = this.amount_of_keypresses == 0;
+        }
 
-        if (current_amount_of_keypresses >= this.amount_of_keypresses) {
+        if (keypress) {
             if (!this.acting && !this.pressing) { // to avoid concurrent access, we refuse keypress() if there is a parallel act or keypress event
                 this.pressing = true;
                 try {
@@ -106,7 +120,7 @@ var Gameengine = function() {
 
     this.keyup = function (e) {
         this.key = null;
-        if (37 <= this.key && this.key <= 40)
+        if ($.inArray(this.key, KEY_ALL) != -1)
             e.preventDefault();
         return this;
     };
@@ -115,7 +129,7 @@ var Gameengine = function() {
         if (this.key != null)
             return this;
         this.key = e.which;
-        if (37 <= this.key && this.key <= 40)
+        if ($.inArray(this.key, KEY_ALL) != -1)
             e.preventDefault();
         this.key_timer = new Date().getTime();
         this.amount_of_keypresses = 0;
@@ -128,16 +142,16 @@ var Gameengine = function() {
             return this;
 
         switch (this.key) {
-            case 37:
+            case KEY_LEFT:
                 this.gameplay.left();
                 break;
-            case 38:
+            case KEY_UP:
                 this.gameplay.up();
                 break;
-            case 39:
+            case KEY_RIGHT:
                 this.gameplay.right();
                 break;
-            case 40:
+            case KEY_DOWN:
                 this.gameplay.down();
                 break;
         }
