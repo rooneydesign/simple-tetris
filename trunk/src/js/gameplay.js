@@ -1,17 +1,60 @@
-var Gameplay = function (mainarea, nextfigure) {
+var SCORES_TABLE = [0,1,2,4,8];
+
+var Gameplay = function (mainarea, nextfigure, stat) {
     this.figure = null;
     this.next = null;
+    this.stat = stat;
 
     this.init = function() {
-        this.figure = new Figure().init().render(mainarea, true);
-        this.next = new Figure().render(nextfigure, true);
+        this.stat.scores(0);
+        this.stat.level(1);
+        this.figure = new Figure().init().render(mainarea, true, false);
+        this.next = new Figure().render(nextfigure, true, false);
+    };
+
+    this.row_filled = function(i) {
+        var row = mainarea.cells[i];
+        for (var j=0; j<row.length; j++) {
+            if (!row[j].committed)
+                return false;
+        }
+        return true;
+    };
+
+    this.cleanup = function() {
+        var rows_to_remove = [];
+        for (var i0=0; i0<mainarea.cells.length; i0++)
+            if (this.row_filled(i0))
+                rows_to_remove.push(i0);
+
+        this.stat.scores(this.stat.scores() + SCORES_TABLE[rows_to_remove.length]);
+
+        if (rows_to_remove.length > 0) {
+            var first_row = rows_to_remove.pop();
+            var copy_from=first_row;
+            for (var i1=first_row; i1>=0; i1--) {
+                copy_from--;
+                while ($.inArray(copy_from,rows_to_remove) != -1) copy_from--;
+
+                if (copy_from >= 0)
+                    if (copy_from != i1)
+                        for (var j0=0; j0<mainarea.cells[i1].length; j0++)
+                            mainarea.cells[i1][j0].move(mainarea.cells[copy_from][j0]);
+                else
+                    for (var j1=0; j1<mainarea.cells[i1].length; j1++)
+                        mainarea.cells[i1][j1].unsel(true);
+            }
+        }
+
+        return this;
     };
 
     this.act = function() {
         if (this.figure.drop(mainarea)) {
             this.figure.commit(mainarea);
-            this.figure = this.next.render(nextfigure, false).init().render(mainarea, true);
-            this.next = new Figure().render(nextfigure, true);
+            this.cleanup();
+            this.figure = this.next.render(nextfigure, false, false).init().render(mainarea, true, false);
+            this.next = new Figure().render(nextfigure, true, false);
         }
 
         return this;

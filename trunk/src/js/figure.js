@@ -14,11 +14,11 @@ var Figure = function () {
         if (!this.can_moved(gamearea, newx, newy, new_direction))
             return true;
 
-        this.render(gamearea, false);
+        this.render(gamearea, false, false);
         this.x = newx;
         this.y = newy;
         this.direction = new_direction;
-        this.render(gamearea, true);
+        this.render(gamearea, true, false);
         return false;
     };
 
@@ -48,7 +48,7 @@ var Figure = function () {
                     if (sel)
                         gamearea.cells[this.y+i][this.x+j].sel(commit);
                     else
-                        gamearea.cells[this.y+i][this.x+j].unsel();
+                        gamearea.cells[this.y+i][this.x+j].unsel(commit);
             }
         return this;
     };

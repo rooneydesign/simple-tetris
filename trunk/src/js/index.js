@@ -13,11 +13,15 @@ KEYBOARD_SPEED[KEY_RIGHT] = [30, 100];
 KEYBOARD_SPEED[KEY_DOWN] = [40, 0];
 
 $(function() {
+    var stat = new Stat();
+
     var mainarea = new Gamearea();
     var nextfigure = new Gamearea();
-    var gameplay = new Gameplay(mainarea, nextfigure);
+    var gameplay = new Gameplay(mainarea, nextfigure, stat);
     var gameengine = new Gameengine().init(gameplay, mainarea, nextfigure).start();
 
     $(document).keydown(function(e) { gameengine.keydown(e); });
     $(document).keyup(function(e) { gameengine.keyup(e); });
+
+    ko.applyBindings(stat);
 });
