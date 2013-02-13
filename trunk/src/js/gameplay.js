@@ -10,13 +10,13 @@ var Gameplay = function (mainarea) {
         }
 
         if (next_turn)
-            this.figure = new Figure(mainarea).render();
+            this.figure = new Figure(mainarea).render(true);
 
         return this;
     };
 
     this.up = function () {
-        this.figure.rotate();
+        this.figure.rotate(1);
         return this;
     };
 
