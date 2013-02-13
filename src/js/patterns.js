@@ -1,3 +1,6 @@
+var NEXTFIGURE_HEIGHT = 4;
+var NEXTFIGURE_WIDTH = 4;
+
 var PATTERNS = [
     [
         {

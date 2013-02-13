@@ -2,7 +2,6 @@ var KEY_LEFT = 37;
 var KEY_UP = 38;
 var KEY_RIGHT = 39;
 var KEY_DOWN = 40;
-var DO_NOT_REPEAT = -1;
 var KEY_ALL = [KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN];
 
 var Gameengine = function() {
@@ -18,10 +17,14 @@ var Gameengine = function() {
     this.pressing = false;
     this.amount_of_keypresses = 0;
 
-    this.init = function (gameplay, mainarea) {
+    this.init = function (gameplay, mainarea, nextfigure) {
         var $gamearea = $('#gamearea');
         $gamearea.html('');
         $gamearea.append(mainarea.render(HEIGHT, WIDTH));
+
+        var $nextfigure = $('#nextfigure');
+        $nextfigure.html('');
+        $nextfigure.append(nextfigure.render(NEXTFIGURE_HEIGHT, NEXTFIGURE_WIDTH));
 
         var self = this;
         $('#stop').click(function() {
@@ -37,6 +40,8 @@ var Gameengine = function() {
         this.speed = INITIAL_SPEED;
 
         this.gameplay = gameplay;
+
+        gameplay.init();
 
         return this;
     };
