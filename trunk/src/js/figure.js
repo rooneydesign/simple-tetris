@@ -1,22 +1,28 @@
-var Figure = function (gamearea) {
+var Figure = function () {
     this.patterns = PATTERNS[parseInt(Math.random()*PATTERNS.length)];
     this.direction = parseInt(Math.random()*this.patterns.length);
-    this.x = this.patterns[this.direction].startx;
-    this.y = this.patterns[this.direction].starty;
+    this.x = 0;
+    this.y = 0;
 
-    this.move = function (newx, newy, new_direction) {
-        if (!this.can_moved(newx, newy, new_direction))
+    this.init = function () {
+        this.x = this.patterns[this.direction].startx;
+        this.y = this.patterns[this.direction].starty;
+        return this;
+    };
+
+    this.move = function (gamearea, newx, newy, new_direction) {
+        if (!this.can_moved(gamearea, newx, newy, new_direction))
             return true;
 
-        this.render(false);
+        this.render(gamearea, false);
         this.x = newx;
         this.y = newy;
         this.direction = new_direction;
-        this.render(true);
+        this.render(gamearea, true);
         return false;
     };
 
-    this.can_moved = function (newx, newy, new_direction) {
+    this.can_moved = function (gamearea, newx, newy, new_direction) {
         var pattern = this.patterns[new_direction].pattern;
         for (var i=0; i<pattern.length; i++)
             for (var j=0; j<pattern[i].length; j++) {
@@ -34,7 +40,7 @@ var Figure = function (gamearea) {
         return true;
     };
 
-    this.render = function (sel, commit) {
+    this.render = function (gamearea, sel, commit) {
         var pattern = this.patterns[this.direction].pattern;
         for (var i=0; i<pattern.length; i++)
             for (var j=0; j<pattern[i].length; j++) {
@@ -47,30 +53,30 @@ var Figure = function (gamearea) {
         return this;
     };
 
-    this.commit = function () {
-        return this.render(true, true);
+    this.commit = function (gamearea) {
+        return this.render(gamearea, true, true);
     };
 
-    this.drop = function () {
-        return this.move(this.x, this.y + 1, this.direction);
+    this.drop = function (gamearea) {
+        return this.move(gamearea, this.x, this.y + 1, this.direction);
     };
 
-    this.right = function () {
-        return this.move(this.x + 1, this.y, this.direction);
+    this.right = function (gamearea) {
+        return this.move(gamearea, this.x + 1, this.y, this.direction);
     };
 
-    this.left = function () {
-        return this.move(this.x - 1, this.y, this.direction);
+    this.left = function (gamearea) {
+        return this.move(gamearea, this.x - 1, this.y, this.direction);
     };
 
-    this.rotate = function (delta) {
+    this.rotate = function (gamearea, delta) {
         var new_direction = (this.direction + delta + this.patterns.length) % this.patterns.length;
-        if (!this.move(this.x, this.y, new_direction))
+        if (!this.move(gamearea, this.x, this.y, new_direction))
             return false;
 
         var shifts = this.patterns[this.direction].shifts;
         for (var i=0; i<shifts.length; i++)
-            if (!this.move(this.x+shifts[i], this.y, new_direction))
+            if (!this.move(gamearea, this.x+shifts[i], this.y, new_direction))
                 return false;
 
         return true;

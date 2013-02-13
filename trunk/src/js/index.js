@@ -14,8 +14,9 @@ KEYBOARD_SPEED[KEY_DOWN] = [40, 0];
 
 $(function() {
     var mainarea = new Gamearea();
-    var gameplay = new Gameplay(mainarea);
-    var gameengine = new Gameengine().init(gameplay, mainarea).start();
+    var nextfigure = new Gamearea();
+    var gameplay = new Gameplay(mainarea, nextfigure);
+    var gameengine = new Gameengine().init(gameplay, mainarea, nextfigure).start();
 
     $(document).keydown(function(e) { gameengine.keydown(e); });
     $(document).keyup(function(e) { gameengine.keyup(e); });

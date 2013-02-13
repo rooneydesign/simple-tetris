@@ -35,13 +35,16 @@ section.main {
     width: @main-width;
     height: @main-height;
     display: table-cell;
+    vertical-align: top;
 }
 
 section.gamestat {
     width: @gamestat-width;
     display: table-cell;
 
-    background-color: #e0ffff;
+    .stat {
+        padding: 1em;
+    }
 }
 
 footer {
@@ -55,6 +58,9 @@ footer {
 
 div.gametable {
     display: table;
+    border-collapse: collapse;
+    border: 1px solid #d3d3d3;
+    margin: 0 auto 0 auto;
 
     div.gamerow {
         display: table-row;
