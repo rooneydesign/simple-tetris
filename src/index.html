@@ -17,7 +17,8 @@
         <section class="gamestat">
             <div id="nextfigure" class="nextfigure">Next figure...</div>
             <div class="stat">
-                <div id="stat"></div>
+                <div class="scores" data-bind="text: scores">0</div>
+                <div class="level"><span data-bind="text: level">1</span> level</div>
                 <button id="stop">Pause</button>
             </div>
         </section>
@@ -52,12 +53,14 @@
         | © <a href="http://kovalchuk.in">Kirill Kovalchuk</a>
     </footer>
     <script src="js/jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="js/knockout/knockout-2.2.1.js" type="text/javascript"></script>
     <script src="js/cell.js" type="text/javascript"></script>
     <script src="js/figure.js" type="text/javascript"></script>
     <script src="js/gamearea.js" type="text/javascript"></script>
     <script src="js/gameengine.js" type="text/javascript"></script>
     <script src="js/gameplay.js" type="text/javascript"></script>
     <script src="js/patterns.js" type="text/javascript"></script>
+    <script src="js/stat.js" type="text/javascript"></script>
     <script src="js/index.js" type="text/javascript"></script>
     <script type="text/javascript">
 
