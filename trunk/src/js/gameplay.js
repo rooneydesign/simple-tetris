@@ -1,8 +1,7 @@
-var SCORES_TABLE = [0,1,2,4,8];
-
 var Gameplay = function (mainarea, nextfigure, stat) {
     this.figure = null;
     this.next = null;
+    this.last_drop_at = new Date().getTime();
 
     this.init = function() {
         stat.scores(0);
@@ -49,16 +48,26 @@ var Gameplay = function (mainarea, nextfigure, stat) {
         return this;
     };
 
+    this.game_over = function() {
+        alert('GAME OVER');
+        mainarea.clear();
+        nextfigure.clear();
+        this.init();
+        return this;
+    };
+
     this.act = function() {
+        if (new Date().getTime() - this.last_drop_at < DELAY_AFTER_DROP) {
+            // we ignore this act because we want to let user shift figure under flange
+            return this;
+        }
+
         if (this.figure.drop(mainarea)) {
             this.figure.commit(mainarea);
             this.cleanup();
             this.next.render(nextfigure, false, false).init();
             if (!this.next.can_moved(mainarea, this.next.x, this.next.y, this.next.direction)) {
-                alert('GAME OVER');
-                mainarea.clear();
-                nextfigure.clear();
-                this.init();
+                this.game_over();
                 return this;
             }
             this.figure = this.next.render(mainarea, true, false);
@@ -75,6 +84,7 @@ var Gameplay = function (mainarea, nextfigure, stat) {
 
     this.down = function () {
         this.figure.drop(mainarea);
+        this.last_drop_at = new Date().getTime();
         return this;
     };
 

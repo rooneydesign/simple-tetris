@@ -2,6 +2,17 @@ var WIDTH = 10;
 var HEIGHT = 20;
 var FPS = 60; // amount of frames per second
 var INITIAL_SPEED = 1; // cells to fall per second
+var SCORES_TABLE = [
+           0,  // 0  - zero rows
+          2-1, // 1  - one row
+        2*2-1, // 3  - two rows
+      2*2*2-1, // 7  - three rows
+    2*2*2*2-1  // 15 - four rows
+];
+// amount of scores needed for next level is calculated by formula: f(level): (level - 1) ^ 2 * MULTIPLIER
+var MULTIPLIER = 10;
+// 0, 10, 40, 90, 160, 250, 360, 490, 640, 810, 1000 ... etc
+// 1,  2,  3,  4,   5,   6,   7,   8,   9,  10,   11
 
 // keyboard settings
 var KEYBOARD_SPEED = {};
@@ -11,6 +22,7 @@ KEYBOARD_SPEED[KEY_UP] = undefined; // make just one action, don't repeat when u
 KEYBOARD_SPEED[KEY_LEFT] = [30, 100];
 KEYBOARD_SPEED[KEY_RIGHT] = [30, 100];
 KEYBOARD_SPEED[KEY_DOWN] = [40, 0];
+var DELAY_AFTER_DROP = 50; // amount of milliseconds to wait until last drop was made by user. it's needed to let him shift figure under flange
 
 $(function() {
     var stat = new Stat();
