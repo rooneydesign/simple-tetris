@@ -8,7 +8,7 @@ var PATTERNS = [
             {
                 startx:4,
                 starty:0,
-                shifts:[],
+                shiftx:[],
                 map:[
                     [1, 1],
                     [1, 1]
@@ -22,7 +22,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: 0,
-                shifts: [-1],
+                shiftx: [-1],
                 map:[
                     [0, 1, 0],
                     [1, 1, 0],
@@ -32,7 +32,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: 0,
-                shifts: [],
+                shiftx: [],
                 map:[
                     [0, 1, 0],
                     [1, 1, 1],
@@ -42,7 +42,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: 0,
-                shifts: [1],
+                shiftx: [1],
                 map:[
                     [0, 1, 0],
                     [0, 1, 1],
@@ -52,7 +52,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: -1,
-                shifts: [],
+                shiftx: [],
                 map:[
                     [0, 0, 0],
                     [1, 1, 1],
@@ -67,7 +67,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: 0,
-                shifts: [-1],
+                shiftx: [-1],
                 map:[
                     [0, 1, 0],
                     [1, 1, 0],
@@ -77,7 +77,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: -1,
-                shifts: [],
+                shiftx: [],
                 map:[
                     [0, 0, 0],
                     [1, 1, 0],
@@ -92,7 +92,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: 0,
-                shifts: [1],
+                shiftx: [1],
                 map:[
                     [0, 1, 0],
                     [0, 1, 1],
@@ -102,7 +102,7 @@ var PATTERNS = [
             {
                 startx: 4,
                 starty: -1,
-                shifts: [],
+                shiftx: [],
                 map:[
                     [0, 0, 0],
                     [0, 1, 1],
@@ -117,7 +117,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: 0,
-                shifts: [-1, 1, 2],
+                shiftx: [-1, 1, 2],
                 map:[
                     [0, 0, 1, 0],
                     [0, 0, 1, 0],
@@ -128,7 +128,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: -1,
-                shifts: [],
+                shiftx: [],
                 map:[
                     [0, 0, 0, 0],
                     [1, 1, 1, 1],
@@ -144,7 +144,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: 0,
-                shifts: [-1, 1],
+                shiftx: [-1, 1],
                 map:[
                     [0, 0, 1, 0],
                     [0, 0, 1, 0],
@@ -155,7 +155,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: -1,
-                shifts: [1],
+                shiftx: [1],
                 map:[
                     [0, 0, 0, 0],
                     [0, 1, 0, 0],
@@ -166,7 +166,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: -1,
-                shifts: [-1, 1],
+                shiftx: [-1, 1],
                 map:[
                     [0, 0, 0, 0],
                     [0, 1, 1, 0],
@@ -177,7 +177,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: -1,
-                shifts: [-1],
+                shiftx: [-1],
                 map:[
                     [0, 0, 0, 0],
                     [1, 1, 1, 0],
@@ -193,7 +193,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: 0,
-                shifts: [-1, 1],
+                shiftx: [-1, 1],
                 map:[
                     [0, 1, 0, 0],
                     [0, 1, 0, 0],
@@ -204,7 +204,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: -1,
-                shifts: [1],
+                shiftx: [1],
                 map:[
                     [0, 0, 0, 0],
                     [0, 1, 1, 1],
@@ -215,7 +215,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: -1,
-                shifts: [-1, 1],
+                shiftx: [-1, 1],
                 map:[
                     [0, 0, 0, 0],
                     [0, 1, 1, 0],
@@ -226,7 +226,7 @@ var PATTERNS = [
             {
                 startx: 3,
                 starty: -1,
-                shifts: [-1],
+                shiftx: [-1],
                 map:[
                     [0, 0, 0, 0],
                     [0, 0, 1, 0],

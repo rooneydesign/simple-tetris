@@ -74,10 +74,19 @@ var Figure = function () {
         if (!this.move(gamearea, this.x, this.y, new_direction))
             return false;
 
-        var shifts = this.pattern.rotations[this.direction].shifts;
-        for (var i=0; i<shifts.length; i++)
-            if (!this.move(gamearea, this.x+shifts[i], this.y, new_direction))
+        // if rotation is not possible because object is too close to the wall, we can try to shift it horizontally to make it rotateable
+        var shiftx = this.pattern.rotations[this.direction].shiftx;
+        for (var i=0; i<shiftx.length; i++)
+            if (!this.move(gamearea, this.x+shiftx[i], this.y, new_direction))
                 return false;
+
+        // if rotation is not possible because object is too close to the ceiling, we can try to shift it down to make it rotatable
+        if (this.y <= 2) {
+            var shifty = this.pattern.rotations[this.direction].starty;
+            for (var j=shifty; j<0; j++)
+                if (!this.move(gamearea, this.x, this.y-j, new_direction))
+                    return false;
+        }
 
         return true;
     };
