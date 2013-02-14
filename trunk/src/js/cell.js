@@ -1,15 +1,16 @@
 var Cell = function (x, y, $div) {
     this.committed = false;
+    this.color = 'transparent';
 
-    this.sel = function (commit) {
-        $div.addClass('sel');
+    this.sel = function (color, commit) {
+        $div.css('background-color', color);
         if (commit)
             this.committed = true;
         return this;
     };
 
     this.unsel = function(commit) {
-        $div.removeClass('sel');
+        $div.css('background-color', 'transparent');
         if (commit)
             this.committed = false;
         return this;
@@ -18,7 +19,7 @@ var Cell = function (x, y, $div) {
     this.move = function(source) {
         if (this.committed != source.committed) {
             if (source.committed)
-                this.sel(true);
+                this.sel(source.color, true);
             else
                 this.unsel(true);
         }

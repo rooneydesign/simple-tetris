@@ -1,12 +1,12 @@
 var Figure = function () {
-    this.patterns = PATTERNS[parseInt(Math.random()*PATTERNS.length)];
-    this.direction = parseInt(Math.random()*this.patterns.length);
+    this.pattern = PATTERNS[parseInt(Math.random()*PATTERNS.length)];
+    this.direction = parseInt(Math.random()*this.pattern.rotations.length);
     this.x = 0;
     this.y = 0;
 
     this.init = function () {
-        this.x = this.patterns[this.direction].startx;
-        this.y = this.patterns[this.direction].starty;
+        this.x = this.pattern.rotations[this.direction].startx;
+        this.y = this.pattern.rotations[this.direction].starty;
         return this;
     };
 
@@ -23,10 +23,10 @@ var Figure = function () {
     };
 
     this.can_moved = function (gamearea, newx, newy, new_direction) {
-        var pattern = this.patterns[new_direction].pattern;
-        for (var i=0; i<pattern.length; i++)
-            for (var j=0; j<pattern[i].length; j++) {
-                if (pattern[i][j] == 1) {
+        var map = this.pattern.rotations[new_direction].map;
+        for (var i=0; i<map.length; i++)
+            for (var j=0; j<map[i].length; j++) {
+                if (map[i][j] == 1) {
                     var y = newy+i;
                     var x = newx+j;
                     if (!(0 <= x && x < WIDTH && 0 <= y && y < HEIGHT))
@@ -41,12 +41,12 @@ var Figure = function () {
     };
 
     this.render = function (gamearea, sel, commit) {
-        var pattern = this.patterns[this.direction].pattern;
-        for (var i=0; i<pattern.length; i++)
-            for (var j=0; j<pattern[i].length; j++) {
-                if (pattern[i][j] == 1)
+        var map = this.pattern.rotations[this.direction].map;
+        for (var i=0; i<map.length; i++)
+            for (var j=0; j<map[i].length; j++) {
+                if (map[i][j] == 1)
                     if (sel)
-                        gamearea.cells[this.y+i][this.x+j].sel(commit);
+                        gamearea.cells[this.y+i][this.x+j].sel(this.pattern.color, commit);
                     else
                         gamearea.cells[this.y+i][this.x+j].unsel(commit);
             }
@@ -70,11 +70,11 @@ var Figure = function () {
     };
 
     this.rotate = function (gamearea, delta) {
-        var new_direction = (this.direction + delta + this.patterns.length) % this.patterns.length;
+        var new_direction = (this.direction + delta + this.pattern.rotations.length) % this.pattern.rotations.length;
         if (!this.move(gamearea, this.x, this.y, new_direction))
             return false;
 
-        var shifts = this.patterns[this.direction].shifts;
+        var shifts = this.pattern.rotations[this.direction].shifts;
         for (var i=0; i<shifts.length; i++)
             if (!this.move(gamearea, this.x+shifts[i], this.y, new_direction))
                 return false;
