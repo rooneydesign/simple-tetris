@@ -1,7 +1,14 @@
-var Gamearea = function () {
+var Gamearea = function (height, width) {
     this.cells = [];
 
-    this.render = function(height, width) {
+    this.clear = function() {
+        for (var i=0; i<height; i++)
+            for (var j=0; j<width; j++)
+                this.cells[i][j].unsel(true);
+        return this;
+    };
+
+    this.init = function($parent) {
         var $gametable = $('<DIV>').addClass('gametable');
         this.cells = [];
         for (var i=0; i<height; i++) {
@@ -14,6 +21,10 @@ var Gamearea = function () {
            }
            $gametable.append($gamerow);
         }
-        return $gametable;
+
+        $parent.html('');
+        $parent.append($gametable);
+
+        return this;
     };
 };

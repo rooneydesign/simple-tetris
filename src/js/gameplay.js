@@ -3,12 +3,13 @@ var SCORES_TABLE = [0,1,2,4,8];
 var Gameplay = function (mainarea, nextfigure, stat) {
     this.figure = null;
     this.next = null;
-    this.stat = stat;
 
     this.init = function() {
-        this.stat.scores(0);
+        stat.scores(0);
         this.figure = new Figure().init().render(mainarea, true, false);
         this.next = new Figure().render(nextfigure, true, false);
+
+        return this;
     };
 
     this.row_filled = function(i) {
@@ -26,7 +27,7 @@ var Gameplay = function (mainarea, nextfigure, stat) {
             if (this.row_filled(i0))
                 rows_to_remove.push(i0);
 
-        this.stat.scores(this.stat.scores() + SCORES_TABLE[rows_to_remove.length]);
+        stat.scores(stat.scores() + SCORES_TABLE[rows_to_remove.length]);
 
         if (rows_to_remove.length > 0) {
             var first_row = rows_to_remove.pop();
@@ -52,7 +53,15 @@ var Gameplay = function (mainarea, nextfigure, stat) {
         if (this.figure.drop(mainarea)) {
             this.figure.commit(mainarea);
             this.cleanup();
-            this.figure = this.next.render(nextfigure, false, false).init().render(mainarea, true, false);
+            this.next.render(nextfigure, false, false).init();
+            if (!this.next.can_moved(mainarea, this.next.x, this.next.y, this.next.direction)) {
+                alert('GAME OVER');
+                mainarea.clear();
+                nextfigure.clear();
+                this.init();
+                return this;
+            }
+            this.figure = this.next.render(mainarea, true, false);
             this.next = new Figure().render(nextfigure, true, false);
         }
 

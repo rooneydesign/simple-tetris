@@ -4,50 +4,20 @@ var KEY_RIGHT = 39;
 var KEY_DOWN = 40;
 var KEY_ALL = [KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN];
 
-var Gameengine = function() {
+var Gameengine = function(gameplay) {
     this.timer = new Date().getTime();
     this.speed = INITIAL_SPEED;
     this.amount_of_acts = 0;
     this.interval = null;
     this.running = false;
-    this.gameplay = null;
     this.key = null;
     this.key_timer = new Date().getTime();
     this.acting = false;
     this.pressing = false;
     this.amount_of_keypresses = 0;
 
-    this.init = function (gameplay, mainarea, nextfigure) {
-        var $gamearea = $('#gamearea');
-        $gamearea.html('');
-        $gamearea.append(mainarea.render(HEIGHT, WIDTH));
-
-        var $nextfigure = $('#nextfigure');
-        $nextfigure.html('');
-        $nextfigure.append(nextfigure.render(NEXTFIGURE_HEIGHT, NEXTFIGURE_WIDTH));
-
-        var self = this;
-        $('#stop').click(function() {
-            if (self.running) {
-                self.stop();
-                $(this).text('Start');
-            } else {
-                self.start();
-                $(this).text('Pause');
-            }
-        });
-
-        this.speed = INITIAL_SPEED;
-
-        this.gameplay = gameplay;
-
-        gameplay.init();
-
-        return this;
-    };
-
     this.act = function () {
-        this.gameplay.act();
+        gameplay.act();
         return this;
     };
 
@@ -153,16 +123,16 @@ var Gameengine = function() {
 
         switch (this.key) {
             case KEY_LEFT:
-                this.gameplay.left();
+                gameplay.left();
                 break;
             case KEY_UP:
-                this.gameplay.up();
+                gameplay.up();
                 break;
             case KEY_RIGHT:
-                this.gameplay.right();
+                gameplay.right();
                 break;
             case KEY_DOWN:
-                this.gameplay.down();
+                gameplay.down();
                 break;
         }
         return this;
