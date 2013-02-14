@@ -25,7 +25,7 @@ $(function() {
     $(document).keydown(function(e) { gameengine.keydown(e); });
     $(document).keyup(function(e) { gameengine.keyup(e); });
     $('#stop').click(function() {
-        if (self.running) {
+        if (gameengine.running) {
             gameengine.stop();
             $(this).text('Start');
         } else {
