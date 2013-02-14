@@ -51,6 +51,11 @@ var Gameengine = function() {
         return this;
     };
 
+    this.set_speed = function (speed) {
+        this.speed = speed;
+        return this;
+    };
+
     this.step_keyboard = function () {
         var now = new Date().getTime();
         var keypress;

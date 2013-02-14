@@ -20,6 +20,8 @@ $(function() {
     var gameplay = new Gameplay(mainarea, nextfigure, stat);
     var gameengine = new Gameengine().init(gameplay, mainarea, nextfigure).start();
 
+    stat.level.subscribe(function(level){gameengine.set_speed(level);});
+
     $(document).keydown(function(e) { gameengine.keydown(e); });
     $(document).keyup(function(e) { gameengine.keyup(e); });
 

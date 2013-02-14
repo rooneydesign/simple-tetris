@@ -18,8 +18,7 @@
             <div id="nextfigure" class="nextfigure">Next figure...</div>
             <div class="stat">
                 <div class="scores" data-bind="text: scores">0</div>
-                <div class="level"><span data-bind="text: level">1</span> level</div>
-                <div><span data-bind="text: percent_completed">1</span></div>
+                <div class="level"><span data-bind="text: level">1</span> level<div class="progress" data-bind="style: {width: percent_completed}"></div></div>
                 <button id="stop">Pause</button>
             </div>
         </section>
