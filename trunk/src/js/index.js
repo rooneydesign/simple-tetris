@@ -15,15 +15,25 @@ KEYBOARD_SPEED[KEY_DOWN] = [40, 0];
 $(function() {
     var stat = new Stat();
 
-    var mainarea = new Gamearea();
-    var nextfigure = new Gamearea();
-    var gameplay = new Gameplay(mainarea, nextfigure, stat);
-    var gameengine = new Gameengine().init(gameplay, mainarea, nextfigure).start();
+    var mainarea = new Gamearea(HEIGHT, WIDTH).init($('#gamearea'));
+    var nextfigure = new Gamearea(NEXTFIGURE_HEIGHT, NEXTFIGURE_WIDTH).init($('#nextfigure'));
+    var gameplay = new Gameplay(mainarea, nextfigure, stat).init();
+    var gameengine = new Gameengine(gameplay).start();
 
     stat.level.subscribe(function(level){gameengine.set_speed(level);});
 
     $(document).keydown(function(e) { gameengine.keydown(e); });
     $(document).keyup(function(e) { gameengine.keyup(e); });
+    $('#stop').click(function() {
+        if (self.running) {
+            gameengine.stop();
+            $(this).text('Start');
+        } else {
+            gameengine.start();
+            $(this).text('Pause');
+        }
+    });
+
 
     ko.applyBindings(stat);
 });

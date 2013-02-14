@@ -3,12 +3,13 @@ var Cell = function (x, y, $div) {
     this.color = 'transparent';
 
     this.sel = function (color, commit) {
-	this.color = color;
+        this.color = color;
         $div.css('background-color', color);
         if (commit)
             this.committed = true;
         return this;
     };
+
 
     this.unsel = function(commit) {
         this.color = 'transparent';
@@ -19,11 +20,12 @@ var Cell = function (x, y, $div) {
     };
 
     this.move = function(source) {
-        if (this.committed != source.committed) {
+        if (this.committed != source.committed || this.color != source.color) {
             if (source.committed)
                 this.sel(source.color, true);
             else
                 this.unsel(true);
         }
+	return this;
     }
 };
