@@ -7,6 +7,7 @@
 // layout
 @standard-padding: 16px;
 @WIDTH: 10;
+@PREVIEW_WIDTH: 4;
 @HEIGHT: 20;
 @cell-width: 30px;
 @cell-height: 30px;
@@ -14,8 +15,9 @@
 
 // color theme
 @gamestat-scores-color: blue;
-@gametable-border: 1px solid #d3d3d3;
-@sel-color: black;
+@standard-border: 1px solid #d3d3d3;
+@sel-background-color: black;
+@color: black;
 @sad-color: gray;
 
 .sad () {
@@ -59,7 +61,20 @@ section.gamestat {
         }
 
         .level {
-            .sad;
+            position: relative;
+            margin: (@standard-padding/2) auto 0 auto;
+            width: (@cell-width * @PREVIEW_WIDTH);
+            border: @standard-border;
+            font-size: @sad-font-size;
+            color: @color;
+
+            .progress {
+                position: absolute;
+                height: 100%;
+                background-color: #90ee90;
+                z-index: -1;
+                top: 0;
+            }
         }
 
         button {
@@ -80,7 +95,7 @@ footer {
 div.gametable {
     display: table;
     border-collapse: collapse;
-    border: @gametable-border;
+    border: @standard-border;
     margin: 0 auto 0 auto;
 
     div.gamerow {
@@ -88,8 +103,8 @@ div.gametable {
 
         div.gamecell {
             display: table-cell;
-            border-top: @gametable-border;
-            border-left: @gametable-border;
+            border-top: @standard-border;
+            border-left: @standard-border;
             width: @cell-width;
             height: @cell-height;
             vertical-align: top;
@@ -98,7 +113,7 @@ div.gametable {
 }
 
 div.sel {
-    background-color: @sel-color;
+    background-color: @sel-background-color;
 }
 
 
