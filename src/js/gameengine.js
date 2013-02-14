@@ -1,7 +1,7 @@
-var KEY_LEFT = 37;
-var KEY_UP = 38;
-var KEY_RIGHT = 39;
-var KEY_DOWN = 40;
+var KEY_LEFT = "37";
+var KEY_UP = "38";
+var KEY_RIGHT = "39";
+var KEY_DOWN = "40";
 var KEY_ALL = [KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN];
 
 var Gameengine = function(gameplay) {
@@ -10,11 +10,11 @@ var Gameengine = function(gameplay) {
     this.amount_of_acts = 0;
     this.interval = null;
     this.running = false;
-    this.key = null;
-    this.key_timer = new Date().getTime();
+    this.keys = {
+       // key: { timer: new Date().getTime(), amount: 0 }
+    };
     this.acting = false;
     this.pressing = false;
-    this.amount_of_keypresses = 0;
 
     this.act = function () {
         gameplay.act();
@@ -26,24 +26,24 @@ var Gameengine = function(gameplay) {
         return this;
     };
 
-    this.step_keyboard = function () {
+    this.step_keyboard = function (key, timings) {
         var now = new Date().getTime();
         var keypress;
-        var speed = KEYBOARD_SPEED[this.key];
-        if (speed) {
+        var speed = KEYBOARD_SPEED[key];
+        if (speed) { // if speed is defined, e.g. several keypresses at a row
             var amount_of_millis_for_every_keypress = 1 / speed[0] * 1000;
-            var current_amount_of_keypresses = Math.floor((now - this.key_timer - (this.amount_of_keypresses > 0 ? speed[1] : 0)) / amount_of_millis_for_every_keypress);
-            keypress = current_amount_of_keypresses >= this.amount_of_keypresses;
+            var current_amount_of_keypresses = Math.floor((now - timings.timer - (timings.amount > 0 ? speed[1] : 0)) / amount_of_millis_for_every_keypress);
+            keypress = current_amount_of_keypresses >= timings.amount;
         } else {
-            keypress = this.amount_of_keypresses == 0;
+            keypress = timings.amount == 0; // because we want only single keypress
         }
 
         if (keypress) {
             if (!this.acting && !this.pressing) { // to avoid concurrent access, we refuse keypress() if there is a parallel act or keypress event
                 this.pressing = true;
                 try {
-                    this.amount_of_keypresses += 1;
-                    this.keypress();
+                    timings.amount += 1;
+                    this.keypress(key);
                 }
                 finally {
                     this.pressing = false;
@@ -76,8 +76,10 @@ var Gameengine = function(gameplay) {
     };
 
     this.step = function () {
-        if (this.key != null) {
-            this.step_keyboard();
+        for(var key in this.keys) {
+            if (this.keys.hasOwnProperty(key)) {
+                this.step_keyboard(key, this.keys[key]);
+            }
         }
         return this.step_act();
     };
@@ -99,29 +101,32 @@ var Gameengine = function(gameplay) {
     };
 
     this.keyup = function (e) {
-        this.key = null;
-        if ($.inArray(this.key, KEY_ALL) != -1)
+        var key = e.which + "";
+        if ($.inArray(key, KEY_ALL) != -1) {
+            delete this.keys[key];
             e.preventDefault();
+        }
         return this;
     };
 
     this.keydown = function (e) {
-        if (this.key != null)
-            return this;
-        this.key = e.which;
-        if ($.inArray(this.key, KEY_ALL) != -1)
+        var key = e.which + "";
+        if ($.inArray(key, KEY_ALL) != -1) {
+            if (key in this.keys)
+                return this;
             e.preventDefault();
-        this.key_timer = new Date().getTime();
-        this.amount_of_keypresses = 0;
-        this.step_keyboard();
+            var timings = {timer: new Date().getTime(), amount: 0};
+            this.keys[key] = timings;
+            this.step_keyboard(key, timings);
+        }
         return this;
     };
 
-    this.keypress = function() {
+    this.keypress = function(key) {
         if (!this.running)
             return this;
 
-        switch (this.key) {
+        switch (key) {
             case KEY_LEFT:
                 gameplay.left();
                 break;
