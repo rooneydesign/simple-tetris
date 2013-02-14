@@ -7,7 +7,6 @@ var Gameplay = function (mainarea, nextfigure, stat) {
 
     this.init = function() {
         this.stat.scores(0);
-        this.stat.level(1);
         this.figure = new Figure().init().render(mainarea, true, false);
         this.next = new Figure().render(nextfigure, true, false);
     };
