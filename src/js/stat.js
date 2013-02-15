@@ -1,5 +1,3 @@
-function get_level(scores) { return parseInt(Math.pow(scores/MULTIPLIER,0.5))+1; }
-function get_scores(level) { return Math.pow(level-1,2) * MULTIPLIER; }
 
 var Stat = function () {
     this.scores = ko.observable('scores');

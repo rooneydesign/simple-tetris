@@ -1,7 +1,7 @@
 var Gameplay = function (mainarea, nextfigure, stat) {
     this.figure = null;
     this.next = null;
-    this.last_drop_at = new Date().getTime();
+    this.last_drop_at = new Date().getTime(); // time from last manual drop which produced figure movement
 
     this.init = function() {
         stat.scores(0);
@@ -83,8 +83,8 @@ var Gameplay = function (mainarea, nextfigure, stat) {
     };
 
     this.down = function () {
-        this.figure.drop(mainarea);
-        this.last_drop_at = new Date().getTime();
+        if (!this.figure.drop(mainarea))
+            this.last_drop_at = new Date().getTime();
         return this;
     };
 

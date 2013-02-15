@@ -22,7 +22,11 @@ var Gameengine = function(gameplay) {
     };
 
     this.set_speed = function (speed) {
-        this.speed = speed;
+        if (this.speed != speed) {
+            this.speed = speed;
+            this.timer = new Date().getTime();
+            this.amount_of_acts = 0;
+        }
         return this;
     };
 
