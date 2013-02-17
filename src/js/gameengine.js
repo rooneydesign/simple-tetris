@@ -4,12 +4,13 @@ var KEY_RIGHT = "39";
 var KEY_DOWN = "40";
 var KEY_ALL = [KEY_LEFT, KEY_UP, KEY_RIGHT, KEY_DOWN];
 
-var Gameengine = function(gameplay) {
-    this.timer = new Date().getTime();
+var Gameengine = function(gameplay, stat) {
+    this.act_timer = new Date().getTime();
     this.speed = INITIAL_SPEED;
     this.amount_of_acts = 0;
-    this.interval = null;
     this.running = false;
+    this.fps_timer = new Timer(FPS_HISTORY_DEPTH * 2);
+    this.fps_shown = new Date().getTime();
     this.keys = {
        // key: { timer: new Date().getTime(), amount: 0 }
     };
@@ -24,8 +25,7 @@ var Gameengine = function(gameplay) {
     this.set_speed = function (speed) {
         if (this.speed != speed) {
             this.speed = speed;
-            this.timer = new Date().getTime();
-            this.amount_of_acts = 0;
+            this.runStepInit();
         }
         return this;
     };
@@ -61,7 +61,7 @@ var Gameengine = function(gameplay) {
     this.step_act = function () {
         var now = new Date().getTime();
         var amount_of_millis_for_every_act = 1 / this.speed * 1000;
-        var current_amount_of_acts = Math.floor((now - this.timer) / amount_of_millis_for_every_act);
+        var current_amount_of_acts = Math.floor((now - this.act_timer) / amount_of_millis_for_every_act);
 
         if (current_amount_of_acts > this.amount_of_acts) {
             if (!this.acting && !this.pressing) { // to avoid concurrent access, we refuse act() if there is a parallel act or keypress event
@@ -80,26 +80,50 @@ var Gameengine = function(gameplay) {
     };
 
     this.step = function () {
+        this.fps_timer.tick(true);
         for(var key in this.keys) {
             if (this.keys.hasOwnProperty(key)) {
                 this.step_keyboard(key, this.keys[key]);
             }
         }
-        return this.step_act();
+        this.step_act();
+        this.fps_timer.tick(false);
+
+        return this.running ? this.runStepAgain() : this;
     };
 
-    this.start = function () {
+    this.runStepAgain = function () {
+        // run again
         var self = this;
-        this.timer = new Date().getTime();
-        this.amount_of_acts = 0;
-        this.interval = setInterval(function() { self.step(); }, 1000 / FPS);
-        this.running = true;
+        var avg = this.fps_timer.avg_to_any(true);
+        var delay = Math.min((1 - FPS_CPU_UTILIZATION) / FPS_CPU_UTILIZATION * avg, 1000 / FPS_MIN);
+        setTimeout(function() { self.step(); }, delay);
+
+        // calculate and show amount of fps
+        var now = new Date().getTime();
+        if (now - this.fps_shown > FPS_UPDATE_FREQUENCY) {
+            var avg_to_same = this.fps_timer.avg_to_same(true);
+            stat.fps(avg_to_same == 0 ? 0 : parseInt(1000 / avg_to_same));
+            this.fps_shown = now;
+        }
+
         return this;
     };
 
+    this.runStepInit = function () {
+        this.act_timer = new Date().getTime();
+        this.amount_of_acts = 0;
+        this.fps_timer = new Timer(FPS_HISTORY_DEPTH * 2);
+        this.fps_shown = new Date().getTime();
+        return this;
+    };
+
+    this.start = function () {
+        this.running = true;
+        return this.runStepInit().runStepAgain();
+    };
+
     this.stop = function () {
-        if (this.interval)
-            clearInterval(this.interval);
         this.running = false;
         return this;
     };

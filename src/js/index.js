@@ -1,6 +1,9 @@
 var WIDTH = 10;
 var HEIGHT = 20;
-var FPS = 60; // amount of frames per second
+var FPS_HISTORY_DEPTH = 20; // amount of measures of running time to include into calculation of planning FPS
+var FPS_CPU_UTILIZATION = 0.1; // between (0 and 1]. percent of cpu used for the game.
+var FPS_MIN = 10; // minumum amount of FPS
+var FPS_UPDATE_FREQUENCY = 1000; // amount of millesconds between times of displaying fps
 var INITIAL_SPEED = 1; // cells to fall per second
 var SCORES_TABLE = [
            0,  // 0  - zero rows
@@ -38,7 +41,7 @@ var LEVEL_TO_SPEED_BASE = 0.9; // how quickly speed will slow down when increasi
 //     1 1
 //     2 1.9
 //     3 2.71
-//     4 3.44
+//     4
 // 1 - one-to-one
 // level speed
 //     1 1
@@ -53,7 +56,7 @@ $(function() {
     var mainarea = new Gamearea(HEIGHT, WIDTH).init($('#gamearea'));
     var nextfigure = new Gamearea(NEXTFIGURE_HEIGHT, NEXTFIGURE_WIDTH).init($('#nextfigure'));
     var gameplay = new Gameplay(mainarea, nextfigure, stat).init();
-    var gameengine = new Gameengine(gameplay).start();
+    var gameengine = new Gameengine(gameplay, stat).start();
 
     stat.level.subscribe(function(level){gameengine.set_speed(sum_of_powers(level-1, LEVEL_TO_SPEED_BASE));});
 

@@ -16,11 +16,10 @@
         </section>
         <section class="gamestat">
             <div id="nextfigure" class="nextfigure">Next figure...</div>
-            <div class="stat">
-                <div class="scores" data-bind="text: scores">0</div>
-                <div class="level"><span data-bind="text: level">1</span> level<div class="progress" data-bind="style: {width: percent_completed}"></div></div>
-                <button id="stop">Pause</button>
-            </div>
+            <div class="scores" data-bind="text: scores">0</div>
+            <div class="level"><span data-bind="text: level">1</span> level<div class="progress" data-bind="style: {width: percent_completed}"></div></div>
+            <button id="stop">Pause</button>
+            <div class="fps">FPS: <span data-bind="text: fps">0</span></div>
         </section>
     </div>
     <footer>
@@ -61,6 +60,7 @@
     <script src="js/gameplay.js" type="text/javascript"></script>
     <script src="js/patterns.js" type="text/javascript"></script>
     <script src="js/stat.js" type="text/javascript"></script>
+    <script src="js/timer.js" type="text/javascript"></script>
     <script src="js/index.js" type="text/javascript"></script>
     <script type="text/javascript">
 
