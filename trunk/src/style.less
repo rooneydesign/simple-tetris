@@ -48,36 +48,33 @@ section.main {
     vertical-align: top;
 }
 
+section.gamestat > * {
+    margin-top: @standard-padding;
+}
+
 section.gamestat {
     width: @gamestat-width;
     display: table-cell;
 
-    .stat {
-        .scores {
-            margin-top: @standard-padding;
-            font-size: @gamestat-scores-font-size;
-            color: @gamestat-scores-color;
-        }
+    .scores {
+        font-size: @gamestat-scores-font-size;
+        color: @gamestat-scores-color;
+    }
 
-        .level {
-            position: relative;
-            margin: (@standard-padding/2) auto 0 auto;
-            width: (@cell-width * @PREVIEW_WIDTH);
-            border: @standard-border;
-            font-size: @sad-font-size;
-            color: @color;
+    .level {
+        position: relative;
+        margin: (@standard-padding/2) auto 0 auto;
+        width: (@cell-width * @PREVIEW_WIDTH);
+        border: @standard-border;
+        font-size: @sad-font-size;
+        color: @color;
 
-            .progress {
-                position: absolute;
-                height: 100%;
-                background-color: #90ee90;
-                z-index: -1;
-                top: 0;
-            }
-        }
-
-        button {
-            margin-top: @standard-padding;
+        .progress {
+            position: absolute;
+            height: 100%;
+            background-color: #90ee90;
+            z-index: -1;
+            top: 0;
         }
     }
 }
