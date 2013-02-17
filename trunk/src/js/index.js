@@ -28,27 +28,8 @@ KEYBOARD_SPEED[KEY_LEFT] = [30, 100];
 KEYBOARD_SPEED[KEY_RIGHT] = [30, 100];
 KEYBOARD_SPEED[KEY_DOWN] = [40, 0];
 var DELAY_AFTER_DROP = 50; // amount of milliseconds to wait until last drop was made by user. it's needed to let him shift figure under flange
-var LEVEL_TO_SPEED_BASE = 0.9; // how quickly speed will slow down when increasing level:
-// examples
-// 0 - increasing of speed stopped:
-// level speed
-//     1 1
-//     2 1
-//     3 1
-//     4 1
-// 0.9 - average increasing of speed:
-// level speed
-//     1 1
-//     2 1.9
-//     3 2.71
-//     4
-// 1 - one-to-one
-// level speed
-//     1 1
-//     2 2
-//     3 3
-//     4 4
-function sum_of_powers(power, base) { return power==0 ? 1 : Math.pow(base, power) + sum_of_powers(power-1, base); }
+var LEVEL_TO_SPEED_BASE = 0.7; // how quickly speed will slow down when increasing level:
+function sum_of_powers(power, base) { return power==0 ? 1 : Math.pow(base, power) + sum_of_powers(power-1, base*1.02); }
 
 $(function() {
     var stat = new Stat();
